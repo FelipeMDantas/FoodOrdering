@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -69,6 +70,7 @@ const RegisterPage = () => {
           or login with provider
         </div>
         <button
+          type="button"
           className="flex gap-4 justify-center"
           onClick={() => signIn("google", { callbackUrl: "/" })}
         >

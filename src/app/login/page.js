@@ -42,6 +42,7 @@ const LoginPage = () => {
           or login with provider
         </div>
         <button
+          type="button"
           className="flex gap-4 justify-center"
           onClick={() => signIn("google", { callbackUrl: "/" })}
         >
