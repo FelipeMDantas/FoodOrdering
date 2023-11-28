@@ -34,15 +34,14 @@ const ProfilePage = () => {
   }
 
   async function handleFileChange(e) {
-    const files = e.files;
+    const files = e.target.files;
 
-    if (files?.length > 0) {
+    if (files?.length === 1) {
       const data = new FormData();
-      data.set("files", files);
+      data.set("file", files[0]);
       await fetch("/api/upload", {
         method: "POST",
         body: data,
-        headers: { "Content-Type": "multipart/form-data" },
       });
     }
   }
