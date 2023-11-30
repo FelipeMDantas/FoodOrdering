@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.googleusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "felipe-food-ordering.s3.amazonaws.com",
+      },
     ],
   },
 };
