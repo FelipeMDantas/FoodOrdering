@@ -5,6 +5,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import UserTabs from "../../components/layout/UserTabs";
 
 const ProfilePage = () => {
   const session = useSession();
@@ -17,6 +18,8 @@ const ProfilePage = () => {
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [profileFetched, setProfileFetched] = useState(false);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -28,6 +31,8 @@ const ProfilePage = () => {
         setPostalCode(data.postalCode);
         setCity(data.city);
         setCountry(data.country);
+        setIsAdmin(data.admin);
+        setProfileFetched(true);
       });
     }
   }, [session, status]);
@@ -90,14 +95,14 @@ const ProfilePage = () => {
     }
   }
 
-  if (status === "loading") return "Loading...";
+  if (status === "loading" || !profileFetched) return "Loading...";
 
   if (status === "unauthenticated") return redirect("/login");
 
   return (
     <section className="mt-8">
-      <h1 className="text-center text-primary text-4xl mb-4">Profile</h1>
-      <div className="max-w-md mx-auto">
+      <UserTabs isAdmin={isAdmin} />
+      <div className="max-w-md mx-auto mt-8">
         <div className="flex gap-4">
           <div className="p-2 rounded-lg relative max-w-[120px]">
             {image && (
