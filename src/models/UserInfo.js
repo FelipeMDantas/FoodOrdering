@@ -7,6 +7,7 @@ const UserInfoSchema = new Schema({
   city: { type: String },
   country: { type: String },
   admin: { type: Boolean, default: false },
+  phone: { type: String },
 });
 
 export const UserInfo = models?.UserInfo || model("UserInfo", UserInfoSchema);

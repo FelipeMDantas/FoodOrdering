@@ -9,7 +9,6 @@ const UserSchema = new Schema(
       required: true,
     },
     image: { type: String },
-    phone: { type: String },
   },
   { timestamps: true }
 );
