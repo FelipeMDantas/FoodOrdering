@@ -1,40 +1,55 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import UserTabs from "../../components/layout/UserTabs";
-import { useProfile } from "../../components/UseProfile";
+import UserTabs from "@/components/layout/UserTabs";
+import { useProfile } from "@/components/UseProfile";
 import toast from "react-hot-toast";
 
 const CategoriesPage = () => {
-  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
+  const [editedCategory, setEditedCategory] = useState(null);
 
   const { loading: profileLoading, data: profileData } = useProfile();
 
   useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  function fetchCategories() {
     fetch("/api/categories").then((res) => {
       res.json().then((categories) => {
         setCategories(categories);
       });
     });
-  }, []);
+  }
 
-  async function handleNewCategorySubmit(e) {
+  async function handleCategorySubmit(e) {
     e.preventDefault();
 
     const creationPromise = new Promise(async (resolve, reject) => {
+      const data = { name: categoryName };
+
+      if (editedCategory) {
+        data._id = editedCategory._id;
+      }
+
       const response = await fetch("/api/categories", {
-        method: "POST",
+        method: editedCategory ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newCategoryName }),
+        body: JSON.stringify(data),
       });
+      categoryName("");
+      fetchCategories();
 
       if (response.ok) resolve();
       else reject();
     });
 
     await toast.promise(creationPromise, {
-      loading: "Creating your new category",
+      loading: editedCategory
+        ? "Updating category..."
+        : "Creating your new category...",
       success: "Category created",
       error: "Error, sorry",
     });
@@ -51,19 +66,26 @@ const CategoriesPage = () => {
   return (
     <section className="mt-8 max-w-md mx-auto">
       <UserTabs isAdmin={true} />
-      <form className="mt-8" onSubmit={handleNewCategorySubmit}>
+      <form className="mt-8" onSubmit={handleCategorySubmit}>
         <div className="flex gap-2 items-end">
           <div className="grow">
-            <label>New category name</label>
+            <label>
+              {editedCategory ? "Upte category" : "New category name"}
+              {editedCategory && (
+                <>
+                  : <b>{editedCategory.name}</b>
+                </>
+              )}
+            </label>
             <input
               type="text"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
             />
           </div>
           <div className="pb-2">
             <button className="border border-primary" type="submit">
-              Create
+              {editedCategory ? "Update" : "Create"}
             </button>
           </div>
         </div>
@@ -72,9 +94,15 @@ const CategoriesPage = () => {
         <h2 className="mt-8 text-sm text-gray-500">Edit category:</h2>
         {categories?.length > 0 &&
           categories.map((c) => (
-            <div className="bg-gray-200 rounded-xl p-2 px-4 flex gap-1 cursor-pointer">
+            <button
+              className="bg-gray-200 rounded-xl p-2 px-4 flex gap-1 cursor-pointer mb-1"
+              onClick={() => {
+                setEditedCategory(c);
+                setCategoryName(c.name);
+              }}
+            >
               <span>c.name</span>
-            </div>
+            </button>
           ))}
       </div>
     </section>

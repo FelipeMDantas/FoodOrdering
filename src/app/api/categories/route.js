@@ -9,3 +9,9 @@ export async function POST(req) {
 export async function GET() {
   return Response.json(await Category.find());
 }
+
+export async function PUT(req) {
+  const { _id, name } = await req.json();
+  await Category.updateOne({ _id }, { name });
+  return Response.json(true);
+}
