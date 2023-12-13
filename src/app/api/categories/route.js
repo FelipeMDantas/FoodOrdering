@@ -19,3 +19,9 @@ export async function PUT(req) {
   await Category.updateOne({ _id }, { name });
   return Response.json(true);
 }
+
+export async function DELETE(req) {
+  mongoose.connect(process.env.MONGO_URL);
+  console.log(req);
+  return Response.json(true);
+}
