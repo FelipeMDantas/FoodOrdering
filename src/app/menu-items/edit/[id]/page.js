@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import MenuItemForm from "@/components/layout/MenuItemForm";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function EditMenuItemPage() {
   const { loading, data } = useProfile();
@@ -46,7 +47,7 @@ export default function EditMenuItemPage() {
 
   async function handleDeleteClick() {
     const promise = new Promise(async (resolve, reject) => {
-      const res = await fetch("/api/menu-items?_id" + id, {
+      const res = await fetch("/api/menu-items?_id=" + id, {
         method: "DELETE",
       });
       if (res.ok) resolve();
@@ -76,9 +77,12 @@ export default function EditMenuItemPage() {
         </Link>
       </div>
       <MenuItemForm menuItem={menuItem} onSubmit={handleFormSubmit} />
-      <div className="max-w-md mx-auto mt-4">
+      <div className="max-w-md mx-auto mt-2">
         <div className="max-w-xs ml-auto pl-4">
-          <button>Delete this menu item</button>
+          <DeleteButton
+            label={"Delete this menu item"}
+            onDelete={handleDeleteClick}
+          />
         </div>
       </div>
     </section>

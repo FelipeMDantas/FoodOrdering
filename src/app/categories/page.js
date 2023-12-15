@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import UserTabs from "@/components/layout/UserTabs";
 import { useProfile } from "@/components/UseProfile";
 import toast from "react-hot-toast";
+import DeleteButton from "@/components/DeleteButton";
 
 const CategoriesPage = () => {
   const [categoryName, setCategoryName] = useState("");
@@ -133,9 +134,10 @@ const CategoriesPage = () => {
                 >
                   Edit
                 </button>
-                <button type="button" onClick={() => handleDeleteClick(c._id)}>
-                  Delete
-                </button>
+                <DeleteButton
+                  label={"Delete"}
+                  onDelete={() => handleDeleteClick(c._id)}
+                />
               </div>
             </div>
           ))}
