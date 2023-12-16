@@ -24,7 +24,7 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
 
   return (
     <form
-      className="mt-8 max-w-md mx-auto"
+      className="mt-8 max-w-2xl mx-auto"
       onSubmit={(e) =>
         onSubmit(e, {
           image,
