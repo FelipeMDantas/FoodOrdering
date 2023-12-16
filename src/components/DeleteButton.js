@@ -5,15 +5,22 @@ export default function DeleteButton({ label, onDelete }) {
 
   if (showConfirm) {
     return (
-      <div className="absolute inset-0 flex items-center h-full">
-        <div className="fixed top-0 left-0 bg-white p-4 rounded-lg">
+      <div className="fixed bg-black/80 justify-center inset-0 flex items-center h-full">
+        <div className="bg-white p-4 rounded-lg">
           <div>Are you sure you want to delete?</div>
           <div className="flex gap-2 mt-1">
             <button type="button" onClick={() => setShowConfirm(false)}>
               Cancel
             </button>
-            <button type="button" className="primary" onClick={onDelete}>
-              Yes, delete!
+            <button
+              type="button"
+              className="primary"
+              onClick={() => {
+                onDelete();
+                setShowConfirm(false);
+              }}
+            >
+              Yes,&nbsp;delete!
             </button>
           </div>
         </div>
