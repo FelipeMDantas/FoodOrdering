@@ -1,8 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import MenuItem from "../menu/MenuItem";
 import SectionHeaders from "./SectionHeaders";
+import { useEffect } from "react";
 
 const HomeMenu = () => {
+  useEffect(() => {}, []);
+
   return (
     <section>
       <div className="absolute left-0 right-0 w-full justify-start">
@@ -14,7 +19,10 @@ const HomeMenu = () => {
         </div>
       </div>
       <div className="text-center mb-4">
-        <SectionHeaders subHeader={"check out"} mainHeader={"Menu"} />
+        <SectionHeaders
+          subHeader={"check out"}
+          mainHeader={"Our Best Sellers"}
+        />
       </div>
       <div className="grid grid-cols-3 gap-4">
         <MenuItem />
