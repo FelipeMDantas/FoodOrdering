@@ -3,10 +3,18 @@
 import Image from "next/image";
 import MenuItem from "../menu/MenuItem";
 import SectionHeaders from "./SectionHeaders";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const HomeMenu = () => {
-  useEffect(() => {}, []);
+  const [bestSellers, setBestSellers] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/menu-items").then((res) => {
+      res.json().then((menuItems) => {
+        setBestSellers(menuItems.slice(-3));
+      });
+    });
+  }, []);
 
   return (
     <section>
@@ -25,12 +33,8 @@ const HomeMenu = () => {
         />
       </div>
       <div className="grid grid-cols-3 gap-4">
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
+        {bestSellers?.length > 0 &&
+          bestSellers.map((item) => <MenuItem {...item} />)}
       </div>
     </section>
   );
