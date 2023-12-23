@@ -1,5 +1,6 @@
 export default function MenuItemTile({ onAddToCart, ...item }) {
-  const { image, description, name, basePrice } = item;
+  const { image, description, name, basePrice, sizes, extraIngredientPrices } =
+    item;
 
   return (
     <div
@@ -16,7 +17,11 @@ hover:shadow-black/25 transition-all"
         onClick={onAddToCart}
         type="button"
       >
-        Add to card ${basePrice}
+        {sizes?.length > 0 || extraIngredientPrices?.length > 0 ? (
+          <span>Add to cart (from ${basePrice})</span>
+        ) : (
+          <span> Add to card ${basePrice}</span>
+        )}
       </button>
     </div>
   );

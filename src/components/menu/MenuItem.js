@@ -12,22 +12,51 @@ function MenuItem(menuItem) {
   const { addToCart } = useContext(CartContext);
 
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(sizes?.[0] || null);
+  const [selectedExtras, setSelectedExtras] = useState([]);
 
   function handleAddToCartButtonClick() {
-    if (sizes.length === 0 && extraIngredientPrices.length === 0) {
-      addToCart(menuItem);
-      toast.success("Added to cart!");
-    } else {
+    const hasOptions = sizes.length > 0 || extraIngredientPrices.length > 0;
+    if (hasOptions && !showPopup) {
       setShowPopup(true);
+      return;
+    }
+
+    addToCart(menuItem, selectedSize, selectedExtras);
+    setShowPopup(false);
+    toast.success("Added to cart!");
+  }
+
+  function handleExtraThingClick(e, extraThing) {
+    const checked = e.target.checked;
+
+    if (checked) setSelectedExtras((prev) => [...prev, extraThing]);
+    else
+      setSelectedExtras((prev) => {
+        return prev.filter((e) => e.name !== extraThing.name);
+      });
+  }
+
+  let selectedPrice = basePrice;
+  if (selectedSize) selectedPrice += selectedSize.price;
+
+  if (selectedExtras.length > 0) {
+    for (const extra of selectedExtras) {
+      selectedPrice += extra.price;
     }
   }
 
   return (
     <>
       {showPopup && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center">
-          <div className="bg-white p-2 rounded-lg max-w-md my-8">
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center"
+          onClick={() => setShowPopup(false)}
+        >
+          <div
+            className="bg-white p-2 rounded-lg max-w-md my-8"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div
               className="overflow-y-scroll p-2"
               style={{ maxHeight: "calc(100vh - 100px)" }}
@@ -48,7 +77,12 @@ function MenuItem(menuItem) {
                   <h3 className="text-center text-gray-700">Pick your size</h3>
                   {sizes.map((size) => (
                     <label className="flex items-center gap-2 p-4 border rounded-md mb-1">
-                      <input type="radio" name="size" />
+                      <input
+                        type="radio"
+                        name="size"
+                        onClick={() => setSelectedSize(size)}
+                        checked={selectedSize?.name === size.name}
+                      />
                       {size.name} ${basePrice + size.price}
                     </label>
                   ))}
@@ -56,10 +90,14 @@ function MenuItem(menuItem) {
               )}
               {extraIngredientPrices?.length > 0 && (
                 <div className="py-2">
-                  <h3 className="text-center text-gray-700">Pick your size</h3>
+                  <h3 className="text-center text-gray-700">Any extras?</h3>
                   {extraIngredientPrices.map((extraThing) => (
                     <label className="flex items-center gap-2 p-4 border rounded-md mb-1">
-                      <input type="checkbox" name={extraThing.name} />
+                      <input
+                        type="checkbox"
+                        name={extraThing.name}
+                        onClick={(e) => handleExtraThingClick(e, extraThing)}
+                      />
                       {extraThing.name} +${extraThing.price}
                     </label>
                   ))}
@@ -67,8 +105,15 @@ function MenuItem(menuItem) {
               )}
             </div>
 
-            <button className="primary" type="button">
-              Add to cart "selected price"
+            <button
+              className="primary sticky bottom-2"
+              type="button"
+              onClick={handleAddToCartButtonClick}
+            >
+              Add to cart {selectedPrice}
+            </button>
+            <button className="mt-2" onClick={() => setShowPopup(false)}>
+              Cancel
             </button>
           </div>
         </div>
