@@ -43,14 +43,14 @@ export default function CartPage() {
       <div className="text-center">
         <SectionHeaders mainHeader="Cart" />
       </div>
-      <div className="mt-4 grid gap-4 grid-cols-2">
+      <div className="mt-8 grid gap-8 grid-cols-2">
         <div>
           {cartProducts?.length === 0 && (
             <div>No products in your shopping cart</div>
           )}
           {cartProducts?.length > 0 &&
             cartProducts.map((product, index) => (
-              <div className="flex items-center gap-4 mb-2 border-b py-2">
+              <div className="flex items-center gap-4 border-b py-4">
                 <div className="w-24">
                   <Image width={240} height={240} src={product.image} alt="" />
                 </div>
@@ -85,7 +85,7 @@ export default function CartPage() {
                 </div>
               </div>
             ))}
-          <div className="py-4 text-right pr-16">
+          <div className="py-2 text-right pr-16">
             <span className="text-gray-500">Subtotal:</span>
             <span className="text-lg font-semibold pl-2">${total}</span>
           </div>
